@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
+import {env} from "../../env.ts";
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -86,7 +87,7 @@ export const axiosBaseQuery =
                     isRefreshing = true
 
                     try {
-                        await axiosInstance.post('/auth/refresh')
+                        api.dispatch({ type: `${env.AUTH_URL}${env.AUTH_REFRESH_URL}` })
 
                         processQueue(null)
                         isRefreshing = false
@@ -97,7 +98,7 @@ export const axiosBaseQuery =
                         processQueue(refreshError, null)
                         isRefreshing = false
 
-                        api.dispatch({ type: 'auth/logout' })
+                        api.dispatch({ type: `${env.AUTH_URL}${env.AUTH_SIGN_OUT_URL}` })
 
                         return {
                             error: {
