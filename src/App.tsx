@@ -3,7 +3,7 @@ function App() {
 
   return (
     <>
-      Codik
+      Codik1
     </>
   )
 }
