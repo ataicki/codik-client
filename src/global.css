@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* Включаем поддержку .dark класса */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ====================== СВЕТЛАЯ ТЕМА (по умолчанию) ====================== */
+:root {
+    /* Основные */
+    --background: hsl(210 40% 98%);      /* очень светлый голубоватый */
+    --foreground: hsl(222 47% 11%);
+
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(222 47% 11%);
+
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(222 47% 11%);
+
+    /* Главный цвет — яркий фиолетовый (самый весёлый для детей) */
+    --primary: hsl(263 85% 62%);
+    --primary-foreground: hsl(210 40% 98%);
+
+    /* Вторичный — яркий бирюзовый */
+    --secondary: hsl(170 75% 92%);
+    --secondary-foreground: hsl(170 70% 25%);
+
+    /* Акцент — тёплый оранжево-жёлтый (энергия и радость) */
+    --accent: hsl(38 95% 58%);
+    --accent-foreground: hsl(222 47% 11%);
+
+    /* Дополнительные детские цвета */
+    --success: hsl(140 80% 55%);
+    --warning: hsl(38 95% 58%);
+    --destructive: hsl(0 84% 65%);
+    --destructive-foreground: hsl(210 40% 98%);
+
+    --muted: hsl(210 40% 96%);
+    --muted-foreground: hsl(215 16% 47%);
+
+    --border: hsl(214 32% 91%);
+    --input: hsl(214 32% 91%);
+    --ring: hsl(263 85% 62%);
+
+    /* Специально для детей */
+    --kid-blue: hsl(197 90% 58%);
+    --kid-green: hsl(140 80% 55%);
+    --kid-pink: hsl(330 85% 65%);
+    --kid-yellow: hsl(48 95% 58%);
+
+    --radius: 1rem; /* большие скругления — очень детский вид */
+}
+
+/* ====================== ТЁМНАЯ ТЕМА (если захотите) ====================== */
+.dark {
+    --background: hsl(222 47% 11%);
+    --foreground: hsl(210 40% 98%);
+
+    --card: hsl(217 32% 17%);
+    --card-foreground: hsl(210 40% 98%);
+
+    --popover: hsl(217 32% 17%);
+    --popover-foreground: hsl(210 40% 98%);
+
+    --primary: hsl(263 85% 70%);
+    --primary-foreground: hsl(222 47% 11%);
+
+    --secondary: hsl(170 60% 25%);
+    --secondary-foreground: hsl(170 75% 92%);
+
+    --accent: hsl(38 95% 65%);
+    --accent-foreground: hsl(222 47% 11%);
+
+    --muted: hsl(217 32% 20%);
+    --muted-foreground: hsl(215 20% 65%);
+
+    --border: hsl(217 32% 25%);
+    --input: hsl(217 32% 25%);
+    --ring: hsl(263 85% 70%);
+
+    --kid-blue: hsl(197 90% 65%);
+    --kid-green: hsl(140 80% 60%);
+    --kid-pink: hsl(330 85% 72%);
+    --kid-yellow: hsl(48 95% 65%);
+}
+
+/* ====================== МАППИНГ В TAILWIND ====================== */
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    /* Детские цвета */
+    --color-kid-blue: var(--kid-blue);
+    --color-kid-green: var(--kid-green);
+    --color-kid-pink: var(--kid-pink);
+    --color-kid-yellow: var(--kid-yellow);
+}
+
+/* ====================== БАЗОВЫЕ СТИЛИ ====================== */
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground font-sans;
+    }
+
+    /* Лёгкий градиентный фон для главной страницы */
+    .kid-bg {
+        background: linear-gradient(135deg, hsl(210 40% 98%) 0%, hsl(263 40% 98%) 100%);
+    }
+    .dark .kid-bg {
+        background: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(263 30% 15%) 100%);
+    }
+}
