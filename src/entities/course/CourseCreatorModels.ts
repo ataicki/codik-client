@@ -1,4 +1,4 @@
-export type StepType = 'lesson' | 'test'
+export type StepType = 'lesson' | 'test' | 'code'
 
 export type CourseTestOption = {
     id: string
@@ -12,6 +12,14 @@ export type CourseTestQuestion = {
     options: CourseTestOption[]
 }
 
+export type CourseCodeExercise = {
+    id: string
+    taskTitle: string
+    description: string
+    expectedOutput: string
+    starterCode: string
+}
+
 export type CourseStep = {
     id: string
     title: string
@@ -19,6 +27,7 @@ export type CourseStep = {
     order: number
     markdownContent?: string
     questions?: CourseTestQuestion[]
+    codeExercises?: CourseCodeExercise[]
 }
 
 export type CourseModule = {

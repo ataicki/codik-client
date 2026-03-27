@@ -19,6 +19,7 @@ export type {
     CourseModule,
     CourseTestOption,
     CourseTestQuestion,
+    CourseCodeExercise,
     CreateCourseDraftRequest,
     UpdateCourseDraftRequest,
 } from './course/CourseCreatorModels'

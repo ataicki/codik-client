@@ -47,6 +47,9 @@ const ModuleEditorComponent = ({ module, index, modulesCount }: Props) => {
                     <Button variant="light" onClick={() => addStep(module.id, 'test')} leftSection={<FlaskConical size={16} />}>
                         Добавить тест
                     </Button>
+                    <Button variant="light" onClick={() => addStep(module.id, 'code')} leftSection={<FlaskConical size={16} />}>
+                        Добавить тест
+                    </Button>
                 </Group>
 
                 {module.steps.map((step, stepIndex) => (

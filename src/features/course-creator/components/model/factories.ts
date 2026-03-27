@@ -1,4 +1,4 @@
-import type { CourseModule, CourseStep, CourseTestQuestion, StepType } from '../../../../entities'
+import type { CourseCodeExercise, CourseModule, CourseStep, CourseTestQuestion, StepType } from '../../../../entities'
 
 const createId = () =>
     typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -14,6 +14,14 @@ export const createEmptyQuestion = (): CourseTestQuestion => ({
     ],
 })
 
+export const createEmptyCodeExercise = (): CourseCodeExercise => ({
+    id: createId(),
+    taskTitle: '',
+    description: '',
+    expectedOutput: '',
+    starterCode: '// Выведите ответ через console.log(...)\nconsole.log("");\n',
+})
+
 export const createEmptyStep = (type: StepType): CourseStep => ({
     id: createId(),
     title: '',
@@ -21,6 +29,7 @@ export const createEmptyStep = (type: StepType): CourseStep => ({
     order: 0,
     markdownContent: type === 'lesson' ? '' : undefined,
     questions: type === 'test' ? [createEmptyQuestion()] : undefined,
+    codeExercises: type === 'code' ? [createEmptyCodeExercise()] : undefined,
 })
 
 export const createEmptyModule = (): CourseModule => ({

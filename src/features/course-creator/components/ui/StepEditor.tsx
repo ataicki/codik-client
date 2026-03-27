@@ -1,10 +1,11 @@
 import { memo } from 'react'
-import { ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea } from '@mantine/core'
+import {ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea, Grid, Flex} from '@mantine/core'
 import { ArrowDown, ArrowUp, CirclePlus, Trash2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { CourseStep } from '../../../../entities'
 import { useCourseBuilderActions } from '../model/CourseBuilderContext'
 import { outlinedInputStyles } from '../model/inputStyles'
+import CodeExerciseEditor from './CodeExerciseEditor'
 import TestQuestionEditor from './TestQuestionEditor'
 
 type Props = {
@@ -46,17 +47,33 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                 />
 
                 {step.type === 'lesson' && (
-                    <Group align="start" grow>
+                    <Flex
+                        direction="row"
+                        align="stretch"
+                        gap="md"
+                        style={{ height: '100%' }}
+                    >
                         <Textarea
+                            style={{ flex: 1 }}
                             value={step.markdownContent ?? ''}
-                            onChange={event => updateStep(moduleId, step.id, { markdownContent: event.currentTarget.value })}
-                            minRows={8}
+                            onChange={event =>
+                                updateStep(moduleId, step.id, {
+                                    markdownContent: event.currentTarget.value
+                                })
+                            }
                             styles={outlinedInputStyles}
                         />
-                        <Paper withBorder p="sm" style={{ minHeight: 190 }}>
-                            <ReactMarkdown>{step.markdownContent ?? ''}</ReactMarkdown>
+
+                        <Paper
+                            withBorder
+                            p="sm"
+                            style={{ flex: 1, overflow: 'auto' }}
+                        >
+                            <ReactMarkdown>
+                                {step.markdownContent ?? ''}
+                            </ReactMarkdown>
                         </Paper>
-                    </Group>
+                    </Flex>
                 )}
 
                 {step.type === 'test' && (
@@ -72,6 +89,18 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                         <Button variant="light" leftSection={<CirclePlus size={14} />} onClick={() => addQuestion(moduleId, step.id)}>
                             Добавить вопрос
                         </Button>
+                    </Stack>
+                )}
+                {step.type === 'code' && (
+                    <Stack>
+                        {(step.codeExercises ?? []).map(exercise => (
+                            <CodeExerciseEditor
+                                key={exercise.id}
+                                moduleId={moduleId}
+                                stepId={step.id}
+                                codeExercise={exercise}
+                            />
+                        ))}
                     </Stack>
                 )}
             </Stack>
