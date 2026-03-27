@@ -8,10 +8,15 @@ import {RegisterPage} from "../../pages/register";
 import {HomePage} from "../../pages/home";
 import {AdminPage} from "../../pages/admin";
 import {ProfilePage} from "../../pages/profile";
+import { CourseCreatorPage } from '../../pages/course-creator'
 import {UserRole} from "../../entities";
 import {AppShellLayout} from "../../widgets";
+import {useGetMeQuery} from "../../shared/api";
 
 export const AppRouter = () => {
+    useGetMeQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
     return (
         <BrowserRouter>
             <Routes>
@@ -31,6 +36,10 @@ export const AppRouter = () => {
 
                         <Route element={<RoleRoute role={UserRole.ADMIN}/>}>
                             <Route path={AppRoutes.ADMIN} element={<AdminPage/>}/>
+                        </Route>
+
+                        <Route element={<RoleRoute role={UserRole.COURSE_CREATOR}/>}>
+                            <Route path={AppRoutes.COURSE_CREATOR} element={<CourseCreatorPage/>}/>
                         </Route>
 
                     </Route>

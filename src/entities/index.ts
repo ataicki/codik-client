@@ -11,3 +11,14 @@ export type {
     ParentProfileDto,
     ParentKidProgressDto,
 } from './profile/ParentProfile'
+
+export type {
+    StepType,
+    CourseDraft,
+    CourseStep,
+    CourseModule,
+    CourseTestOption,
+    CourseTestQuestion,
+    CreateCourseDraftRequest,
+    UpdateCourseDraftRequest,
+} from './course/CourseCreatorModels'

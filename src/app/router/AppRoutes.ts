@@ -8,4 +8,5 @@ export const AppRoutes = {
     PROFILE_PARENT: "/profile/parent",
 
     ADMIN: "/admin",
+    COURSE_CREATOR: "/creator/courses",
 };

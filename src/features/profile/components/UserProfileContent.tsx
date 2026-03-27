@@ -1,4 +1,4 @@
-import { Alert, Card, Group, Progress, Skeleton, Stack, Text, Title } from '@mantine/core'
+import { Alert, Skeleton, Stack } from '@mantine/core'
 import { UserRole } from '../../../entities'
 import { useGetMeQuery } from '../../../shared/api'
 

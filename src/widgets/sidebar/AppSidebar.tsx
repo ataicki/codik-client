@@ -1,5 +1,5 @@
 import { NavLink, ScrollArea, Stack, Text } from '@mantine/core'
-import { Home, Shield, UserCircle2 } from 'lucide-react'
+import { GraduationCap, Home, Shield, UserCircle2 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import {useAppSelector} from "../../app/store/hooks.ts";
 import {AppRoutes} from "../../app/router/AppRoutes.ts";
@@ -34,6 +34,15 @@ const AppSidebar = () => {
                         component={Link}
                         to={AppRoutes.ADMIN}
                         active={location.pathname === AppRoutes.ADMIN}
+                    />
+                )}
+                {role === UserRole.COURSE_CREATOR && (
+                    <NavLink
+                        label="Мои курсы"
+                        leftSection={<GraduationCap size={16} />}
+                        component={Link}
+                        to={AppRoutes.COURSE_CREATOR}
+                        active={location.pathname === AppRoutes.COURSE_CREATOR}
                     />
                 )}
             </Stack>

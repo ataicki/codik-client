@@ -54,7 +54,7 @@ const RegisterForm = () => {
             fullName,
             email,
             password,
-            role: UserRole.STUDENT,
+            role: role,
             age,
         }).unwrap()
         if (response.user !== undefined) {

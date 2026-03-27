@@ -16,6 +16,7 @@ export type RegisterRequestDto = {
 export type UserResponseDto = {
     id: string
     email: string
+    fullName?: string
     role: UserRole
     createdAt?: string
     updatedAt?: string

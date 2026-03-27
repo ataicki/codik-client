@@ -3,13 +3,10 @@ import { Outlet } from 'react-router-dom'
 import AppHeader from '../header/AppHeader'
 import AppSidebar from '../sidebar/AppSidebar'
 import {useAppSelector} from "../../app/store/hooks.ts";
-import {useGetMeQuery} from "../../shared/api";
 
 const AppShellLayout = () => {
     const { isInitialized } = useAppSelector(state => state.auth)
-    useGetMeQuery(undefined, {
-        refetchOnMountOrArgChange: true,
-    });
+
     return (
         <AppShell
             header={{ height: 72 }}

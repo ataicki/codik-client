@@ -4,7 +4,8 @@ import { UserRole } from '../../../entities'
 
 const HomeContent = () => {
     const { user, isInitialized } = useAppSelector(state => state.auth)
-
+    console.log(isInitialized)
+    console.log(user)
     if (!isInitialized || !user) {
         return (
             <Stack gap="md">
@@ -18,17 +19,29 @@ const HomeContent = () => {
         )
     }
 
-    const cards = user.role === UserRole.Parent
+    const cards = user.role === UserRole.PARENT
         ? [
             { title: 'Контроль прогресса', description: 'Отслеживайте уровни, XP и активность ребенка каждый день.' },
             { title: 'Домашняя поддержка', description: 'Понимайте, где ребенку нужна помощь по теме.' },
             { title: 'Достижения', description: 'Отмечайте награды и мотивируйте продолжать занятия.' },
         ]
-        : [
-            { title: 'Управление курсами', description: 'Быстро создавайте и редактируйте модули обучения.' },
-            { title: 'Практика и тесты', description: 'Добавляйте задачи, мини-игры и квизы к каждому уроку.' },
-            { title: 'Аналитика класса', description: 'Смотрите результаты и прогресс детей по модулям.' },
-        ]
+        : user.role === UserRole.ADMIN
+            ? [
+                { title: 'Модерация пользователей', description: 'Проверяйте роли, активность и спорные действия в системе.' },
+                { title: 'Проверка заявок', description: 'Рассматривайте заявки на добавление и обновление курсов.' },
+                { title: 'Контроль качества', description: 'Следите за структурой и содержанием учебных материалов.' },
+            ]
+            : user.role === UserRole.COURSE_CREATOR
+                ? [
+                    { title: 'Создание курсов', description: 'Собирайте курс из модулей и шагов с уроками и тестами.' },
+                    { title: 'Редактирование модулей', description: 'Меняйте порядок и содержание шагов в каждом модуле.' },
+                    { title: 'Черновики и публикация', description: 'Готовьте изменения перед отправкой на модерацию.' },
+                ]
+                : [
+                    { title: 'Изучение модулей', description: 'Проходите темы по шагам в удобном темпе.' },
+                    { title: 'Практика и тесты', description: 'Закрепляйте материал через задачи и квизы.' },
+                    { title: 'Награды и прогресс', description: 'Получайте XP и открывайте достижения за активность.' },
+                ]
 
     return (
         <Stack gap="lg">
@@ -41,7 +54,7 @@ const HomeContent = () => {
                         </Text>
                     </div>
                     <Badge size="lg" color="violet">
-                        {user.role === UserRole.Parent ? 'Родитель' : user.role}
+                        {user.role === UserRole.PARENT ? 'Родитель' : user.role}
                     </Badge>
                 </Group>
             </Card>
