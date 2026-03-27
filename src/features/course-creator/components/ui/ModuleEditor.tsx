@@ -1,9 +1,9 @@
-import { memo } from 'react'
-import { ActionIcon, Badge, Button, Card, Group, Stack, TextInput } from '@mantine/core'
-import { ArrowDown, ArrowUp, FileText, FlaskConical, Trash2 } from 'lucide-react'
-import type { CourseModule } from '../../../../entities'
-import { useCourseBuilderActions } from '../model/CourseBuilderContext'
-import { outlinedInputStyles } from '../model/inputStyles'
+import {memo} from 'react'
+import {ActionIcon, Badge, Button, Card, Group, Stack, TextInput} from '@mantine/core'
+import {ArrowDown, ArrowUp, FileText, FlaskConical, Trash2} from 'lucide-react'
+import type {CourseModule} from '../../../../entities'
+import {useCourseBuilderActions} from '../model/CourseBuilderContext'
+import {outlinedInputStyles} from '../model/inputStyles'
 import StepEditor from './StepEditor'
 
 type Props = {
@@ -12,23 +12,30 @@ type Props = {
     modulesCount: number
 }
 
-const ModuleEditorComponent = ({ module, index, modulesCount }: Props) => {
-    const { updateModuleTitle, moveModule, removeModule, addStep } = useCourseBuilderActions()
+const ModuleEditorComponent = ({module, index, modulesCount}: Props) => {
+    const {updateModuleTitle, moveModule, removeModule, addStep} = useCourseBuilderActions()
 
     return (
-        <Card withBorder radius="lg">
-            <Stack>
+        <Card
+            withBorder
+            radius="lg"
+            style={{
+                border: '2px solid var(--mantine-color-gray-3)',
+                background: 'var(--mantine-color-gray-0)',
+            }}
+        >
+            <Stack gap="md">
                 <Group justify="space-between">
                     <Badge>Модуль {index + 1}</Badge>
                     <Group>
                         <ActionIcon onClick={() => moveModule(module.id, 'up')} disabled={index === 0}>
-                            <ArrowUp size={16} />
+                            <ArrowUp size={16}/>
                         </ActionIcon>
                         <ActionIcon onClick={() => moveModule(module.id, 'down')} disabled={index === modulesCount - 1}>
-                            <ArrowDown size={16} />
+                            <ArrowDown size={16}/>
                         </ActionIcon>
                         <ActionIcon color="red" onClick={() => removeModule(module.id)}>
-                            <Trash2 size={16} />
+                            <Trash2 size={16}/>
                         </ActionIcon>
                     </Group>
                 </Group>
@@ -41,13 +48,16 @@ const ModuleEditorComponent = ({ module, index, modulesCount }: Props) => {
                 />
 
                 <Group>
-                    <Button variant="light" onClick={() => addStep(module.id, 'lesson')} leftSection={<FileText size={16} />}>
+                    <Button variant="light" onClick={() => addStep(module.id, 'lesson')}
+                            leftSection={<FileText size={16}/>}>
                         Добавить урок
                     </Button>
-                    <Button variant="light" onClick={() => addStep(module.id, 'test')} leftSection={<FlaskConical size={16} />}>
+                    <Button variant="light" onClick={() => addStep(module.id, 'test')}
+                            leftSection={<FlaskConical size={16}/>}>
                         Добавить тест
                     </Button>
-                    <Button variant="light" onClick={() => addStep(module.id, 'code')} leftSection={<FlaskConical size={16} />}>
+                    <Button variant="light" onClick={() => addStep(module.id, 'code')}
+                            leftSection={<FlaskConical size={16}/>}>
                         Добавить тест
                     </Button>
                 </Group>

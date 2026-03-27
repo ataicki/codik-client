@@ -13,7 +13,7 @@ type Props = {
 }
 
 const CodeExerciseEditor = ({ moduleId, stepId, codeExercise }: Props) => {
-    const { updateCodeExercise, removeCodeExercise } = useCourseBuilderActions()
+    const { updateCodeExercise } = useCourseBuilderActions()
 
     const [checkMessage, setCheckMessage] = useState<string | null>(null)
     const [checking, setChecking] = useState(false)
@@ -52,14 +52,6 @@ const CodeExerciseEditor = ({ moduleId, stepId, codeExercise }: Props) => {
                 <div>
                     <Text fw={600}>Кодовая задача (JavaScript)</Text>
                 </div>
-
-                <Button
-                    color="red"
-                    variant="light"
-                    onClick={() => removeCodeExercise(moduleId, stepId, codeExercise.id)}
-                >
-                    Удалить
-                </Button>
             </Group>
 
             <TextInput

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import {ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea, Grid, Flex} from '@mantine/core'
+import {ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea, Flex} from '@mantine/core'
 import { ArrowDown, ArrowUp, CirclePlus, Trash2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { CourseStep } from '../../../../entities'
@@ -19,10 +19,15 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
     const { moveStep, removeStep, updateStep, addQuestion } = useCourseBuilderActions()
 
     return (
-        <Card withBorder radius="md">
+        <Card withBorder radius="md" style={{
+            border: stepStyles[step.type].border,
+            background: stepStyles[step.type].background,
+        }}>
             <Stack>
                 <Group justify="space-between">
-                    <Badge>{step.type}</Badge>
+                    <Badge color={stepStyles[step.type].color}>
+                        {stepStyles[step.type].label}
+                    </Badge>
                     <Group>
                         <ActionIcon onClick={() => moveStep(moduleId, step.id, 'up')} disabled={stepIndex === 0}>
                             <ArrowUp size={16} />
@@ -67,7 +72,11 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                         <Paper
                             withBorder
                             p="sm"
-                            style={{ flex: 1, overflow: 'auto' }}
+                            style={{
+                                flex: 1,
+                                background: 'white',
+                                border: '1px dashed var(--mantine-color-gray-4)',
+                            }}
                         >
                             <ReactMarkdown>
                                 {step.markdownContent ?? ''}
@@ -77,7 +86,14 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                 )}
 
                 {step.type === 'test' && (
-                    <Stack>
+                    <Stack
+                        style={{
+                            background: 'white',
+                            border: '1px dashed var(--mantine-color-yellow-3)',
+                            borderRadius: 8,
+                            padding: 12,
+                        }}
+                    >
                         {(step.questions ?? []).map(question => (
                             <TestQuestionEditor
                                 key={question.id}
@@ -92,7 +108,14 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                     </Stack>
                 )}
                 {step.type === 'code' && (
-                    <Stack>
+                    <Stack
+                        style={{
+                            background: 'white',
+                            border: '1px dashed var(--mantine-color-green-3)',
+                            borderRadius: 8,
+                            padding: 12,
+                        }}
+                    >
                         {(step.codeExercises ?? []).map(exercise => (
                             <CodeExerciseEditor
                                 key={exercise.id}
@@ -107,6 +130,28 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
         </Card>
     )
 }
+
+const stepStyles = {
+    lesson: {
+        color: 'blue',
+        border: '1px solid var(--mantine-color-blue-4)',
+        background: 'var(--mantine-color-blue-0)',
+        label: 'Урок',
+    },
+    test: {
+        color: 'yellow',
+        border: '1px solid var(--mantine-color-yellow-4)',
+        background: 'var(--mantine-color-yellow-0)',
+        label: 'Тест',
+    },
+    code: {
+        color: 'green',
+        border: '1px solid var(--mantine-color-green-4)',
+        background: 'var(--mantine-color-green-0)',
+        label: 'Код',
+    },
+}
+
 
 const StepEditor = memo(StepEditorComponent)
 

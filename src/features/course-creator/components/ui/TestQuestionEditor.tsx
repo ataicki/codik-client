@@ -41,7 +41,7 @@ const TestQuestionEditorComponent = ({ moduleId, stepId, question }: Props) => {
                             styles={outlinedInputStyles}
                         />
                         <Checkbox
-                            label="isCorrect"
+                            label="Верный"
                             checked={option.isCorrect}
                             onChange={event =>
                                 updateOption(moduleId, stepId, question.id, option.id, {

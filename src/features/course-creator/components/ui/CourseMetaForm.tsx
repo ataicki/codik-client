@@ -7,7 +7,10 @@ const CourseMetaForm = () => {
     const { updateDraftImmer } = useCourseBuilderActions()
 
     return (
-        <Card withBorder radius="xl">
+        <Card withBorder radius="xl" style={{
+            border: '2px solid var(--mantine-color-gray-3)',
+            background: 'var(--mantine-color-gray-0)',
+        }}>
             <Stack>
                 <TextInput
                     label="Название курса"
