@@ -13,7 +13,7 @@ const CourseBuilderContent = () => {
             <Group justify="space-between">
                 <div>
                     <Title order={2}>Конструктор курсов</Title>
-                    <Text c="dimmed">Создавайте курс, модули и шаги: уроки в Markdown и тесты с вариантами.</Text>
+                    <Text c="dimmed">Создавайте курс, модули и шаги: уроки в Markdown, тесты с вариантами, кодовые задания.</Text>
                 </div>
                 <Group>
                     <Button leftSection={<Save size={16}/>} onClick={onSave} loading={isSaving}>

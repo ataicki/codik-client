@@ -1,6 +1,6 @@
 import {memo} from 'react'
 import {ActionIcon, Badge, Button, Card, Group, Stack, TextInput} from '@mantine/core'
-import {ArrowDown, ArrowUp, FileText, FlaskConical, Trash2} from 'lucide-react'
+import {ArrowDown, ArrowUp, Code2Icon, FileText, FlaskConical, Trash2} from 'lucide-react'
 import type {CourseModule} from '../../../../entities'
 import {useCourseBuilderActions} from '../model/CourseBuilderContext'
 import {outlinedInputStyles} from '../model/inputStyles'
@@ -57,8 +57,8 @@ const ModuleEditorComponent = ({module, index, modulesCount}: Props) => {
                         Добавить тест
                     </Button>
                     <Button variant="light" onClick={() => addStep(module.id, 'code')}
-                            leftSection={<FlaskConical size={16}/>}>
-                        Добавить тест
+                            leftSection={<Code2Icon size={16}/>}>
+                        Добавить код
                     </Button>
                 </Group>
 
