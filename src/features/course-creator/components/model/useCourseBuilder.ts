@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useDraftState } from './hooks/useDraftState'
 import { useModuleActions } from './hooks/useModuleActions'
 import { useSaveCourseDraft } from './hooks/useSaveCourseDraft'
@@ -15,11 +16,32 @@ export const useCourseBuilder = () => {
     const testActions = useTestActions(draftState.updateDraftImmer)
     const saveActions = useSaveCourseDraft(draftState.draft, draftState.setDraft)
 
+    const actions = useMemo(
+        () => ({
+            ...moduleActions,
+            ...stepActions,
+            ...testActions,
+            ...saveActions,
+            updateDraftImmer: draftState.updateDraftImmer,
+            setDraft: draftState.setDraft,
+            setActiveModuleId: draftState.setActiveModuleId,
+        }),
+        [
+            moduleActions,
+            stepActions,
+            testActions,
+            saveActions,
+            draftState.updateDraftImmer,
+            draftState.setDraft,
+            draftState.setActiveModuleId,
+        ],
+    )
+
     return {
-        ...draftState,
-        ...moduleActions,
-        ...stepActions,
-        ...testActions,
-        ...saveActions,
+        draft: draftState.draft,
+        activeModule: draftState.activeModule,
+        actions,
     }
 }
+
+export type CourseBuilderActions = ReturnType<typeof useCourseBuilder>['actions']

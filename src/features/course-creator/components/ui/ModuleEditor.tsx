@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { ActionIcon, Badge, Button, Card, Group, Stack, TextInput } from '@mantine/core'
 import { ArrowDown, ArrowUp, FileText, FlaskConical, Trash2 } from 'lucide-react'
 import type { CourseModule } from '../../../../entities'
-import { useCourseBuilderContext } from '../model/CourseBuilderContext'
+import { useCourseBuilderActions } from '../model/CourseBuilderContext'
 import { outlinedInputStyles } from '../model/inputStyles'
 import StepEditor from './StepEditor'
 
@@ -11,8 +12,8 @@ type Props = {
     modulesCount: number
 }
 
-const ModuleEditor = ({ module, index, modulesCount }: Props) => {
-    const { updateModuleTitle, moveModule, removeModule, addStep } = useCourseBuilderContext()
+const ModuleEditorComponent = ({ module, index, modulesCount }: Props) => {
+    const { updateModuleTitle, moveModule, removeModule, addStep } = useCourseBuilderActions()
 
     return (
         <Card withBorder radius="lg">
@@ -61,5 +62,7 @@ const ModuleEditor = ({ module, index, modulesCount }: Props) => {
         </Card>
     )
 }
+
+const ModuleEditor = memo(ModuleEditorComponent)
 
 export default ModuleEditor

@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { ActionIcon, Button, Card, Checkbox, Group, Stack, TextInput } from '@mantine/core'
 import { CirclePlus, Trash2 } from 'lucide-react'
 import type { CourseTestQuestion } from '../../../../entities'
-import { useCourseBuilderContext } from '../model/CourseBuilderContext'
+import { useCourseBuilderActions } from '../model/CourseBuilderContext'
 import { outlinedInputStyles } from '../model/inputStyles'
 
 type Props = {
@@ -10,8 +11,8 @@ type Props = {
     question: CourseTestQuestion
 }
 
-const TestQuestionEditor = ({ moduleId, stepId, question }: Props) => {
-    const { updateQuestionTitle, removeQuestion, addOption, updateOption, removeOption } = useCourseBuilderContext()
+const TestQuestionEditorComponent = ({ moduleId, stepId, question }: Props) => {
+    const { updateQuestionTitle, removeQuestion, addOption, updateOption, removeOption } = useCourseBuilderActions()
 
     return (
         <Card withBorder radius="md">
@@ -65,5 +66,7 @@ const TestQuestionEditor = ({ moduleId, stepId, question }: Props) => {
         </Card>
     )
 }
+
+const TestQuestionEditor = memo(TestQuestionEditorComponent)
 
 export default TestQuestionEditor

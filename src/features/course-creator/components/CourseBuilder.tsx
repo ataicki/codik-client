@@ -1,11 +1,12 @@
 import {Button, Group, Paper, Stack, Text, Title} from '@mantine/core'
 import {CirclePlus, Save} from 'lucide-react'
-import {CourseBuilderProvider, useCourseBuilderContext} from './model/CourseBuilderContext'
+import { CourseBuilderProvider, useCourseBuilderActions, useCourseDraft } from './model/CourseBuilderContext'
 import CourseMetaForm from './ui/CourseMetaForm'
 import ModuleEditor from './ui/ModuleEditor'
 
 const CourseBuilderContent = () => {
-    const {draft, isSaving, addModule, onSave} = useCourseBuilderContext()
+    const { draft } = useCourseDraft()
+    const { isSaving, addModule, onSave } = useCourseBuilderActions()
 
     return (
         <Stack gap="lg">

@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import { ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea } from '@mantine/core'
 import { ArrowDown, ArrowUp, CirclePlus, Trash2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { CourseStep } from '../../../../entities'
-import { useCourseBuilderContext } from '../model/CourseBuilderContext'
+import { useCourseBuilderActions } from '../model/CourseBuilderContext'
 import { outlinedInputStyles } from '../model/inputStyles'
 import TestQuestionEditor from './TestQuestionEditor'
 
@@ -13,8 +14,8 @@ type Props = {
     stepsCount: number
 }
 
-const StepEditor = ({ moduleId, step, stepIndex, stepsCount }: Props) => {
-    const { moveStep, removeStep, updateStep, addQuestion } = useCourseBuilderContext()
+const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) => {
+    const { moveStep, removeStep, updateStep, addQuestion } = useCourseBuilderActions()
 
     return (
         <Card withBorder radius="md">
@@ -77,5 +78,7 @@ const StepEditor = ({ moduleId, step, stepIndex, stepsCount }: Props) => {
         </Card>
     )
 }
+
+const StepEditor = memo(StepEditorComponent)
 
 export default StepEditor

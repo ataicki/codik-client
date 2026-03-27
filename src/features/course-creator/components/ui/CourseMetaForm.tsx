@@ -1,9 +1,10 @@
 import { Card, Stack, TextInput, Textarea } from '@mantine/core'
-import { useCourseBuilderContext } from '../model/CourseBuilderContext'
+import { useCourseBuilderActions, useCourseDraft } from '../model/CourseBuilderContext'
 import { outlinedInputStyles } from '../model/inputStyles'
 
 const CourseMetaForm = () => {
-    const { draft, updateDraftImmer } = useCourseBuilderContext()
+    const { draft } = useCourseDraft()
+    const { updateDraftImmer } = useCourseBuilderActions()
 
     return (
         <Card withBorder radius="xl">
