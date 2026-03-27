@@ -3,8 +3,6 @@ import {ProtectedRoute} from "./ProtectedRoute";
 import {RoleRoute} from "./RoleRoute";
 
 import {AppRoutes} from "./AppRoutes";
-import { AppShellLayout } from "../../features/layout/components";
-
 import {LoginPage} from "../../pages/login";
 import {RegisterPage} from "../../pages/register";
 import {HomePage} from "../../pages/home";
@@ -12,6 +10,7 @@ import {AdminPage} from "../../pages/admin";
 import {ProfilePage} from "../../pages/profile";
 import {UserRole} from "../../entities";
 import { useGetMeQuery } from "../../shared/api";
+import {AppShellLayout} from "../../widgets";
 
 export const AppRouter = () => {
     useGetMeQuery(undefined, {
@@ -31,11 +30,11 @@ export const AppRouter = () => {
                         <Route path={AppRoutes.HOME} element={<HomePage/>}/>
                         <Route path={AppRoutes.PROFILE} element={<ProfilePage/>}/>
 
-                        <Route element={<RoleRoute role={UserRole.Parent}/>}>
+                        <Route element={<RoleRoute role={UserRole.PARENT}/>}>
                             <Route path={AppRoutes.PROFILE_PARENT} element={<ProfilePage/>}/>
                         </Route>
 
-                        <Route element={<RoleRoute role={UserRole.Admin}/>}>
+                        <Route element={<RoleRoute role={UserRole.ADMIN}/>}>
                             <Route path={AppRoutes.ADMIN} element={<AdminPage/>}/>
                         </Route>
 

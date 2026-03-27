@@ -1,15 +1,10 @@
 export { UserRole } from './enums/UserRole'
 
-export type { UserDto } from './user/User'
-
 export type {
     LoginRequestDto,
     RegisterRequestDto,
-    RegisterParentRequestDto,
-    RegisterCourseCreatorRequestDto,
-    RegisterKidRequestDto,
-    AuthResponseDto,
     LogoutResponseDto,
+    UserResponseDto
 } from './auth/AuthDtos'
 
 export type {

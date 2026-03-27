@@ -1,9 +1,9 @@
 import { NavLink, ScrollArea, Stack, Text } from '@mantine/core'
 import { Home, Shield, UserCircle2 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
-import { AppRoutes } from '../../../app/router/AppRoutes'
-import { useAppSelector } from '../../../app/store/hooks'
-import { UserRole } from '../../../entities'
+import {useAppSelector} from "../../app/store/hooks.ts";
+import {AppRoutes} from "../../app/router/AppRoutes.ts";
+import {UserRole} from "../../entities";
 
 const AppSidebar = () => {
     const location = useLocation()
@@ -27,7 +27,7 @@ const AppSidebar = () => {
                     to={AppRoutes.PROFILE}
                     active={location.pathname === AppRoutes.PROFILE}
                 />
-                {role === UserRole.Admin && (
+                {role === UserRole.ADMIN && (
                     <NavLink
                         label="Админ панель"
                         leftSection={<Shield size={16} />}

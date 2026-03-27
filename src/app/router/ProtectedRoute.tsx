@@ -4,7 +4,7 @@ import { AppRoutes } from "./AppRoutes";
 import { useAppSelector } from "../store/hooks";
 
 export const ProtectedRoute = () => {
-    const { isAuthenticated, isInitialized } = useAppSelector(state => state.auth);
+    const { isAuthenticated, isInitialized, user } = useAppSelector(state => state.auth);
 
     if (!isInitialized) {
         return (
@@ -15,7 +15,7 @@ export const ProtectedRoute = () => {
         );
     }
 
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
         return <Navigate to={AppRoutes.LOGIN} replace />;
     }
 

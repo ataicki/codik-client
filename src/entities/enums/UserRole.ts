@@ -1,6 +1,6 @@
 export enum UserRole {
-    Admin = 'admin',
-    CourseCreator = 'courseCreator',
-    Kid = 'kid',
-    Parent = 'parent'
+    ADMIN = 'ADMIN',
+    COURSE_CREATOR = 'COURSE_CREATOR',
+    STUDENT = 'STUDENT',
+    PARENT = 'PARENT'
 }

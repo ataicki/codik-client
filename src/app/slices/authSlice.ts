@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { UserDto } from '../../entities'
-import { authApi } from '../../shared/api/authApi'
+import { authApi } from '../../shared/api'
+import {UserResponseDto} from "../../entities";
 
 type AuthState = {
-    user: UserDto | null
+    user: UserResponseDto | null
     isAuthenticated: boolean
     isInitialized: boolean
 }
@@ -18,7 +18,8 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setAuth: (state, action: PayloadAction<UserDto>) => {
+        setAuth: (state, action: PayloadAction<UserResponseDto>) => {
+            console.log('setAuth', action.payload)
             state.user = action.payload
             state.isAuthenticated = true
             state.isInitialized = true
@@ -32,30 +33,14 @@ const authSlice = createSlice({
     extraReducers: builder => {
         builder
             .addMatcher(
-                authApi.endpoints.login.matchFulfilled,
+                authApi.endpoints.signIn.matchFulfilled,
                 (state, { payload }) => {
                     state.user = payload.user
                     state.isAuthenticated = true
                     state.isInitialized = true
                 },
             )
-            .addMatcher(
-                authApi.endpoints.registerParent.matchFulfilled,
-                (state, { payload }) => {
-                    state.user = payload.user
-                    state.isAuthenticated = true
-                    state.isInitialized = true
-                },
-            )
-            .addMatcher(
-                authApi.endpoints.registerCourseCreator.matchFulfilled,
-                (state, { payload }) => {
-                    state.user = payload.user
-                    state.isAuthenticated = true
-                    state.isInitialized = true
-                },
-            )
-            .addMatcher(authApi.endpoints.registerKid.matchFulfilled, (state, { payload }) => {
+            .addMatcher(authApi.endpoints.signUp.matchFulfilled, (state, { payload }) => {
                 state.user = payload.user
                 state.isAuthenticated = true
                 state.isInitialized = true
@@ -70,7 +55,7 @@ const authSlice = createSlice({
                 state.isAuthenticated = false
                 state.isInitialized = true
             })
-            .addMatcher(authApi.endpoints.logout.matchFulfilled, state => {
+            .addMatcher(authApi.endpoints.signOut.matchFulfilled, state => {
                 state.user = null
                 state.isAuthenticated = false
                 state.isInitialized = true

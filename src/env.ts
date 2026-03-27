@@ -1,9 +1,9 @@
 import { Env } from './vite-env';
 
 export const env: Env = {
-    VITE_API_BASE_URL: 'http://localhost:5000',
+    VITE_API_BASE_URL: 'http://localhost:5000/api',
 
-    AUTH_URL: '/authenticate',
+    AUTH_URL: '/authentication',
     AUTH_SIGN_IN_URL: '/sign-in',
     AUTH_SIGN_UP_URL: '/sign-up',
     AUTH_SIGN_OUT_URL: '/sign-out',

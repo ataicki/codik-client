@@ -3,7 +3,6 @@ import {
     Anchor,
     Button,
     Card,
-    Center,
     NumberInput,
     PasswordInput,
     SegmentedControl,
@@ -11,19 +10,17 @@ import {
     TextInput,
     Title,
 } from '@mantine/core'
-import {FormEvent, useState} from 'react'
+import {ChangeEvent, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {AppRoutes} from '../../../app/router/AppRoutes'
 import {UserRole} from '../../../entities'
-import {
-    useRegisterCourseCreatorMutation,
-    useRegisterKidMutation,
-    useRegisterParentMutation,
-} from '../../../shared/api'
+import {useSignUpMutation} from "../../../shared/api";
+import {setAuth} from "../../../app/slices/authSlice.ts";
+import {useDispatch} from "react-redux";
 
 const RegisterForm = () => {
     const navigate = useNavigate()
-    const [role, setRole] = useState<UserRole.Parent | UserRole.CourseCreator | UserRole.Kid>(UserRole.Parent)
+    const [role, setRole] = useState<UserRole.PARENT | UserRole.COURSE_CREATOR | UserRole.STUDENT>(UserRole.PARENT)
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [age, setAge] = useState<number>(14)
@@ -31,14 +28,14 @@ const RegisterForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [localError, setLocalError] = useState<string | null>(null)
 
-    const [registerParent, parentState] = useRegisterParentMutation()
-    const [registerCourseCreator, creatorState] = useRegisterCourseCreatorMutation()
-    const [registerKid, kidState] = useRegisterKidMutation()
+    const [signUp, signUpState] = useSignUpMutation()
 
-    const isLoading = parentState.isLoading || creatorState.isLoading || kidState.isLoading
-    const apiError = getErrorMessage(parentState.error ?? creatorState.error ?? kidState.error)
+    const isLoading = signUpState.isLoading
+    const apiError = getErrorMessage(signUpState.error)
 
-    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    const dispatch = useDispatch()
+
+    const onSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()
         setLocalError(null)
 
@@ -47,35 +44,24 @@ const RegisterForm = () => {
             return
         }
 
-        if (role === UserRole.Parent) {
-            await registerParent({fullName, email, password, role: UserRole.Parent}).unwrap()
-        }
-
-        if (role === UserRole.CourseCreator) {
-            await registerCourseCreator({
-                fullName,
-                email,
-                password,
-                role: UserRole.CourseCreator,
-            }).unwrap()
-        }
-
-        if (role === UserRole.Kid) {
+        if (role === UserRole.STUDENT) {
             if (age < 14) {
                 setLocalError('Регистрация ребенка доступна только с 14 лет')
                 return
             }
 
-            await registerKid({
+            const response = await signUp({
                 fullName,
                 email,
                 password,
-                role: UserRole.Kid,
+                role: UserRole.STUDENT,
                 age,
             }).unwrap()
+            if (response.user !== undefined) {
+                dispatch(setAuth(response.user))
+                navigate(AppRoutes.HOME)
+            }
         }
-
-        navigate(AppRoutes.HOME)
     }
 
     return (
@@ -88,11 +74,11 @@ const RegisterForm = () => {
                 <Stack gap="md">
                     <SegmentedControl
                         value={role}
-                        onChange={value => setRole(value as UserRole.Parent | UserRole.CourseCreator | UserRole.Kid)}
+                        onChange={value => setRole(value as UserRole.PARENT | UserRole.COURSE_CREATOR | UserRole.STUDENT)}
                         data={[
-                            {value: UserRole.Parent, label: 'Родитель'},
-                            {value: UserRole.CourseCreator, label: 'Создатель курса'},
-                            {value: UserRole.Kid, label: 'Ребенок'},
+                            {value: UserRole.PARENT, label: 'Родитель'},
+                            {value: UserRole.COURSE_CREATOR, label: 'Создатель курса'},
+                            {value: UserRole.STUDENT, label: 'Ребенок'},
                         ]}
                     />
 
@@ -111,13 +97,13 @@ const RegisterForm = () => {
                         required
                     />
 
-                    {role === UserRole.Kid && (
+                    {role === UserRole.STUDENT && (
                         <NumberInput
                             label="Возраст"
                             min={14}
                             max={99}
                             value={age}
-                            onChange={value => setAge(value)}
+                            onChange={value => setAge(Number(value))}
                             required
                         />
                     )}

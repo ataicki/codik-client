@@ -1,18 +1,15 @@
 import { api } from './api'
 import { env } from '../../env'
 import type {
-    AuthResponseDto,
+    UserResponseDto,
     LoginRequestDto,
     LogoutResponseDto,
-    ParentProfileDto,
-    RegisterCourseCreatorRequestDto, RegisterKidRequestDto,
-    RegisterParentRequestDto,
-    UserDto,
+    RegisterRequestDto,
 } from '../../entities'
 
 export const authApi = api.injectEndpoints({
     endpoints: build => ({
-        login: build.mutation<AuthResponseDto, LoginRequestDto>({
+        signIn: build.mutation<{user: UserResponseDto}, LoginRequestDto>({
             query: body => ({
                 url: `${env.AUTH_URL}${env.AUTH_SIGN_IN_URL}`,
                 method: 'POST',
@@ -21,7 +18,7 @@ export const authApi = api.injectEndpoints({
             }),
         }),
 
-        registerParent: build.mutation<AuthResponseDto, RegisterParentRequestDto>({
+        signUp: build.mutation<{user: UserResponseDto}, RegisterRequestDto>({
             query: body => ({
                 url: `${env.AUTH_URL}${env.AUTH_SIGN_UP_URL}`,
                 method: 'POST',
@@ -30,25 +27,7 @@ export const authApi = api.injectEndpoints({
             }),
         }),
 
-        registerCourseCreator: build.mutation<AuthResponseDto, RegisterCourseCreatorRequestDto>({
-            query: body => ({
-                url: `${env.AUTH_URL}${env.AUTH_SIGN_UP_URL}`,
-                method: 'POST',
-                data: body,
-                skipAuth: true,
-            }),
-        }),
-
-        registerKid: build.mutation<AuthResponseDto, RegisterKidRequestDto>({
-            query: body => ({
-                url: `${env.AUTH_URL}${env.AUTH_SIGN_UP_URL}`,
-                method: 'POST',
-                data: body,
-                skipAuth: true,
-            }),
-        }),
-
-        getMe: build.query<UserDto, void>({
+        getMe: build.query<UserResponseDto, void>({
             query: () => ({
                 url: `${env.AUTH_URL}${env.AUTH_ME_URL}`,
                 method: 'GET',
@@ -56,30 +35,19 @@ export const authApi = api.injectEndpoints({
             providesTags: ['User'],
         }),
 
-        logout: build.mutation<LogoutResponseDto, void>({
+        signOut: build.mutation<LogoutResponseDto, void>({
             query: () => ({
                 url: `${env.AUTH_URL}${env.AUTH_SIGN_OUT_URL}`,
                 method: 'POST',
             }),
             invalidatesTags: ['User'],
-        }),
-
-        getParentProfile: build.query<ParentProfileDto, void>({
-            query: () => ({
-                url: `${env.AUTH_PROFILE_URL}`,
-                method: 'GET',
-            }),
-            providesTags: ['User'],
-        }),
+        })
     }),
 })
 
 export const {
-    useLoginMutation,
-    useRegisterParentMutation,
-    useRegisterCourseCreatorMutation,
-    useRegisterKidMutation,
+    useSignInMutation,
+    useSignUpMutation,
+    useSignOutMutation,
     useGetMeQuery,
-    useLogoutMutation,
-    useGetParentProfileQuery,
 } = authApi

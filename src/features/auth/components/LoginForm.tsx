@@ -11,14 +11,14 @@ import {
 import {ChangeEvent, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {AppRoutes} from '../../../app/router/AppRoutes'
-import {useLoginMutation} from '../../../shared/api'
+import {useSignInMutation} from "../../../shared/api";
 
 const LoginForm = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const [login, loginState] = useLoginMutation()
+    const [signIn, loginState] = useSignInMutation()
 
     const isLoading = loginState.isLoading
     const errorMessage = getErrorMessage(loginState.error)
@@ -26,9 +26,10 @@ const LoginForm = () => {
     const onSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const response = await login({email, password})
-        if (response.data !== undefined)
+        const response = await signIn({email, password}).unwrap()
+        if (response?.user !== undefined) {
             navigate(AppRoutes.HOME)
+        }
     }
 
     return (

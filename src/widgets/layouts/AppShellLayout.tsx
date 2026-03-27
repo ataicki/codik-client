@@ -1,8 +1,8 @@
 import { AppShell, Skeleton } from '@mantine/core'
 import { Outlet } from 'react-router-dom'
-import { useAppSelector } from '../../../app/store/hooks'
-import AppHeader from './AppHeader'
-import AppSidebar from './AppSidebar'
+import AppHeader from '../header/AppHeader'
+import AppSidebar from '../sidebar/AppSidebar'
+import {useAppSelector} from "../../app/store/hooks.ts";
 
 const AppShellLayout = () => {
     const { isInitialized } = useAppSelector(state => state.auth)
