@@ -49,18 +49,17 @@ const RegisterForm = () => {
                 setLocalError('Регистрация ребенка доступна только с 14 лет')
                 return
             }
-
-            const response = await signUp({
-                fullName,
-                email,
-                password,
-                role: UserRole.STUDENT,
-                age,
-            }).unwrap()
-            if (response.user !== undefined) {
-                dispatch(setAuth(response.user))
-                navigate(AppRoutes.HOME)
-            }
+        }
+        const response = await signUp({
+            fullName,
+            email,
+            password,
+            role: UserRole.STUDENT,
+            age,
+        }).unwrap()
+        if (response.user !== undefined) {
+            dispatch(setAuth(response.user))
+            navigate(AppRoutes.HOME)
         }
     }
 

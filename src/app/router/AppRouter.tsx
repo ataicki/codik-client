@@ -9,14 +9,9 @@ import {HomePage} from "../../pages/home";
 import {AdminPage} from "../../pages/admin";
 import {ProfilePage} from "../../pages/profile";
 import {UserRole} from "../../entities";
-import { useGetMeQuery } from "../../shared/api";
 import {AppShellLayout} from "../../widgets";
 
 export const AppRouter = () => {
-    useGetMeQuery(undefined, {
-        refetchOnMountOrArgChange: true,
-    });
-
     return (
         <BrowserRouter>
             <Routes>
@@ -42,7 +37,6 @@ export const AppRouter = () => {
                 </Route>
 
                 <Route path="*" element={<Navigate to={AppRoutes.HOME} replace/>}/>
-
             </Routes>
         </BrowserRouter>
     );

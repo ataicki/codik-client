@@ -4,7 +4,7 @@ import { AppRoutes } from "./AppRoutes";
 import { useAppSelector } from "../store/hooks";
 
 export const ProtectedRoute = () => {
-    const { isAuthenticated, isInitialized, user } = useAppSelector(state => state.auth);
+    const { isAuthenticated, isInitialized } = useAppSelector(state => state.auth);
 
     if (!isInitialized) {
         return (
