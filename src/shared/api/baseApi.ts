@@ -1,24 +1,25 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
-import {env} from "../../env.ts";
+import { env } from '../../env'
+import { logout } from '../../app/slices/authSlice'
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL ?? env.VITE_API_BASE_URL,
     withCredentials: true,
 })
 
 let isRefreshing = false
 let pendingQueue: Array<{
     resolve: (value: unknown) => void
-    reject: (reason?: any) => void
+    reject: (reason?: unknown) => void
 }> = []
 
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: unknown) => {
     pendingQueue.forEach(p => {
         if (error) {
             p.reject(error)
         } else {
-            p.resolve(token)
+            p.resolve(undefined)
         }
     })
     pendingQueue = []
@@ -87,7 +88,11 @@ export const axiosBaseQuery =
                     isRefreshing = true
 
                     try {
-                        api.dispatch({ type: `${env.AUTH_URL}${env.AUTH_REFRESH_URL}` })
+                        await axiosInstance.post(
+                            `${env.AUTH_URL}${env.AUTH_REFRESH_URL}`,
+                            {},
+                            { signal: api.signal },
+                        )
 
                         processQueue(null)
                         isRefreshing = false
@@ -95,10 +100,10 @@ export const axiosBaseQuery =
                         const retryResult = await axiosInstance(originalRequest)
                         return { data: retryResult.data }
                     } catch (refreshError) {
-                        processQueue(refreshError, null)
+                        processQueue(refreshError)
                         isRefreshing = false
 
-                        api.dispatch({ type: `${env.AUTH_URL}${env.AUTH_SIGN_OUT_URL}` })
+                        api.dispatch(logout())
 
                         return {
                             error: {
@@ -113,7 +118,7 @@ export const axiosBaseQuery =
                 return {
                     error: {
                         status: err.response?.status,
-                        message: (err.response?.data as any)?.message || err.message,
+                        message: (err.response?.data as { message?: string })?.message || err.message,
                         data: err.response?.data,
                     },
                 }

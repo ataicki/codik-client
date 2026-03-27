@@ -4,7 +4,7 @@ import Header from "../header/Header.tsx";
 
 const AppLayout = () => {
     return (
-        <div className="flex h-screen">
+        <div className="flex flex-row h-screen">
 
             <Sidebar />
 

@@ -5,6 +5,7 @@ export const AppRoutes = {
     HOME: "/home",
 
     PROFILE: "/profile",
+    PROFILE_PARENT: "/profile/parent",
 
     ADMIN: "/admin",
 };

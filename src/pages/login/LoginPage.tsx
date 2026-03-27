@@ -1,10 +1,11 @@
+import {LoginForm} from '../../features/auth/components'
+import {Center} from "@mantine/core";
 
 const LoginPage = () => {
-    return (
-        <div>
+    return <Center mih="100vh" p="md" className="kid-bg">
+        <LoginForm/>
+    </Center>
 
-        </div>
-    );
-};
+}
 
-export default LoginPage;
+export default LoginPage

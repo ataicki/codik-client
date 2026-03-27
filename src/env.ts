@@ -9,6 +9,7 @@ export const env: Env = {
     AUTH_SIGN_OUT_URL: '/sign-out',
     AUTH_REFRESH_URL: '/refresh',
     AUTH_ME_URL: '/me',
+    AUTH_PROFILE_URL: '/profile',
 };
 //{{url}}/authentication/sign-in LoginRequest => TokenResponse({accessToken: string, refreshToken})
 // {{url}}/authentication/sign-up RegisterRequest => TokenResponse({accessToken: string, refreshToken})

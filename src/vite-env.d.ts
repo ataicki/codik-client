@@ -7,4 +7,5 @@ export type Env = {
     AUTH_SIGN_OUT_URL: string;
     AUTH_REFRESH_URL: string;
     AUTH_ME_URL: string;
+    AUTH_PROFILE_URL: string;
 };

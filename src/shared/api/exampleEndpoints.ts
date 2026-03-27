@@ -2,12 +2,12 @@ import { api } from './api'
 
 export const extendedApi = api.injectEndpoints({
     endpoints: build => ({
-        getUser: build.query<any, void>({
+        getUser: build.query<unknown, void>({
             query: () => ({ url: '/user' }),
             providesTags: ['User'],
         }),
 
-        updateUser: build.mutation<any, any>({
+        updateUser: build.mutation<unknown, Record<string, unknown>>({
             query: body => ({
                 url: '/user',
                 method: 'PUT',
@@ -16,7 +16,7 @@ export const extendedApi = api.injectEndpoints({
             invalidatesTags: ['User'],
         }),
 
-        uploadAvatar: build.mutation<any, FormData>({
+        uploadAvatar: build.mutation<unknown, FormData>({
             query: formData => ({
                 url: '/user/avatar',
                 method: 'POST',
@@ -25,7 +25,7 @@ export const extendedApi = api.injectEndpoints({
             }),
         }),
 
-        publicData: build.query<any, void>({
+        publicData: build.query<unknown, void>({
             query: () => ({
                 url: '/public',
                 skipAuth: true,

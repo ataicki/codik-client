@@ -1,12 +1,16 @@
-import {AppRouter} from "./app/router";
-import {ThemeProvider} from "./app/providers";
+import { Provider } from 'react-redux'
+import { AppRouter } from './app/router'
+import { ThemeProvider } from './app/providers'
+import { store } from './app/store/store'
+import './global.css'
 
 function App() {
-
     return (
-        <ThemeProvider>
-        <AppRouter/>
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider>
+                <AppRouter />
+            </ThemeProvider>
+        </Provider>
     )
 }
 

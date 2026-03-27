@@ -1,10 +1,11 @@
+import { RegisterForm } from '../../features/auth/components'
+import {Center} from "@mantine/core";
 
-const RegisterPage = () => {
-    return (
-        <div>
+const RegisterPage = () =>
+{
+    return <Center mih="100vh" p="md" className="kid-bg">
+        <RegisterForm />
+    </Center>
+}
 
-        </div>
-    );
-};
-
-export default RegisterPage;
+export default RegisterPage
