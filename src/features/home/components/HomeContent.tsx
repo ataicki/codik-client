@@ -1,11 +1,10 @@
 import { Badge, Card, Grid, Group, Skeleton, Stack, Text, Title } from '@mantine/core'
 import { useAppSelector } from '../../../app/store/hooks'
 import { UserRole } from '../../../entities'
+import { StudentHomeView } from './student/StudentHomeView'
 
 const HomeContent = () => {
     const { user, isInitialized } = useAppSelector(state => state.auth)
-    console.log(isInitialized)
-    console.log(user)
     if (!isInitialized || !user) {
         return (
             <Stack gap="md">
@@ -17,6 +16,10 @@ const HomeContent = () => {
                 </Grid>
             </Stack>
         )
+    }
+
+    if (user.role === UserRole.STUDENT) {
+        return <StudentHomeView />
     }
 
     const cards = user.role === UserRole.PARENT

@@ -54,28 +54,40 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                 {step.type === 'lesson' && (
                     <Flex
                         direction="row"
-                        align="stretch"
+                        align="stretch"          // важно для одинаковой высоты
                         gap="md"
-                        style={{ height: '100%' }}
+                        style={{
+                            minHeight: 320,      // начальная высота (можно под себя)
+                            maxWidth: '100%',    // не даём всему блоку растягиваться шире родителя
+                        }}
                     >
                         <Textarea
-                            style={{ flex: 1 }}
                             value={step.markdownContent ?? ''}
                             onChange={event =>
                                 updateStep(moduleId, step.id, {
-                                    markdownContent: event.currentTarget.value
+                                    markdownContent: event.currentTarget.value,
                                 })
                             }
+                            placeholder="Введите содержимое урока в формате Markdown..."
                             styles={outlinedInputStyles}
+                            resize="vertical"           // разрешаем тянуть только вниз
+                            minRows={12}                // минимальное количество строк
+                            style={{
+                                flex: '1 1 50%',        // примерно половина ширины
+                                maxWidth: '50%',        // жёсткий потолок по ширине
+                            }}
                         />
 
                         <Paper
                             withBorder
                             p="sm"
                             style={{
-                                flex: 1,
+                                flex: '1 1 50%',
+                                maxWidth: '50%',        // чтобы не рос шире
                                 background: 'white',
                                 border: '1px dashed var(--mantine-color-gray-4)',
+                                overflowY: 'auto',      // если контент большой — скролл внутри
+                                minHeight: '100%',      // занимает всю доступную высоту Flex
                             }}
                         >
                             <ReactMarkdown>
@@ -84,7 +96,6 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                         </Paper>
                     </Flex>
                 )}
-
                 {step.type === 'test' && (
                     <Stack
                         style={{

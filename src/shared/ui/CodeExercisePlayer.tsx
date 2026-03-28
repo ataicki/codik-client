@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Alert, Button, Group, Paper, Stack, Text, Title } from '@mantine/core'
 import Editor from '@monaco-editor/react'
 import ReactMarkdown from 'react-markdown'
@@ -8,13 +8,22 @@ import { outputsMatch, runJavaScriptInWorker } from '../code'
 type Props = {
     exercise: CourseCodeExercise
     initialCode?: string
+    onSuccess?: () => void
 }
 
-const CodeExercisePlayer = ({ exercise, initialCode }: Props) => {
+const CodeExercisePlayer = ({ exercise, initialCode, onSuccess }: Props) => {
     const [code, setCode] = useState(initialCode ?? exercise.starterCode)
     const [running, setRunning] = useState(false)
     const [feedback, setFeedback] = useState<string | null>(null)
     const [ok, setOk] = useState<boolean | null>(null)
+    const successReported = useRef(false)
+
+    useEffect(() => {
+        successReported.current = false
+        setCode(initialCode ?? exercise.starterCode)
+        setFeedback(null)
+        setOk(null)
+    }, [exercise.id, exercise.starterCode, initialCode])
 
     const run = async () => {
         setRunning(true)
@@ -30,6 +39,10 @@ const CodeExercisePlayer = ({ exercise, initialCode }: Props) => {
             const pass = outputsMatch(output, exercise.expectedOutput)
             setOk(pass)
             setFeedback(pass ? 'Верно!' : `Получено:\n${output}`)
+            if (pass && !successReported.current) {
+                successReported.current = true
+                onSuccess?.()
+            }
         } finally {
             setRunning(false)
         }

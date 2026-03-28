@@ -9,4 +9,8 @@ export const AppRoutes = {
 
     ADMIN: "/admin",
     COURSE_CREATOR: "/creator/courses",
-};
+
+    LEARN_COURSE: "/learn/:courseId",
+
+    learnCourse: (courseId: string) => `/learn/${encodeURIComponent(courseId)}`,
+} as const

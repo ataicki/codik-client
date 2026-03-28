@@ -9,6 +9,7 @@ import {HomePage} from "../../pages/home";
 import {AdminPage} from "../../pages/admin";
 import {ProfilePage} from "../../pages/profile";
 import { CourseCreatorPage } from '../../pages/course-creator'
+import { CourseLearnPage } from '../../pages/learn'
 import {UserRole} from "../../entities";
 import {AppShellLayout} from "../../widgets";
 import {useGetMeQuery} from "../../shared/api";
@@ -25,6 +26,8 @@ export const AppRouter = () => {
                 <Route path={AppRoutes.REGISTER} element={<RegisterPage/>}/>
 
                 <Route element={<ProtectedRoute/>}>
+                    <Route path={AppRoutes.LEARN_COURSE} element={<CourseLearnPage/>}/>
+
                     <Route element={<AppShellLayout/>}>
 
                         <Route path={AppRoutes.HOME} element={<HomePage/>}/>

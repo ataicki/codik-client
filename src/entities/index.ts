@@ -23,3 +23,9 @@ export type {
     CreateCourseDraftRequest,
     UpdateCourseDraftRequest,
 } from './course/CourseCreatorModels'
+
+export type {
+    StudentCourseListItem,
+    StudentLastCompleted,
+    StudentHomeResponse,
+} from './student/StudentHome'
