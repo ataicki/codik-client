@@ -18,17 +18,40 @@ import { Flame, Gamepad2, Star, Trophy } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ru'
+import { useMemo } from 'react'
 import { useAppSelector } from '../../../../app/store/hooks'
-import { useGetStudentHomeQuery } from '../../../../shared/api'
+import { useGetCoursesQuery, useGetStudentHomeQuery } from '../../../../shared/api'
+import type { CourseListItem, StudentCourseListItem } from '../../../../entities'
 import { KidMascot } from './KidMascot'
 import { StudentCourseCard } from './StudentCourseCard'
 
 dayjs.extend(relativeTime)
 dayjs.locale('ru')
 
+const mapCatalogToItems = (inProgressIds: Set<string>, catalog: CourseListItem[]): StudentCourseListItem[] =>
+    catalog
+        .filter(c => c.status === 'PUBLISHED' && c.isAvailable !== false && !inProgressIds.has(c.id))
+        .map(c => ({
+            courseId: c.id,
+            title: c.title,
+            description: c.description,
+            coverUrl: c.image?.url ?? '',
+            progressPercent: 0,
+            completedStepsCount: 0,
+            totalStepsCount: Math.max(1, c._count.modules * 2),
+        }))
+
 export const StudentHomeView = () => {
     const user = useAppSelector(s => s.auth.user)
     const { data, isLoading } = useGetStudentHomeQuery()
+    const { data: catalog } = useGetCoursesQuery()
+
+    const availableCourses = useMemo(() => {
+        if (!data) return []
+        const inProgressIds = new Set(data.inProgress.map(c => c.courseId))
+        const fromApi = catalog ? mapCatalogToItems(inProgressIds, catalog) : []
+        return fromApi.length > 0 ? fromApi : data.available
+    }, [data, catalog])
 
     if (isLoading || !data) {
         return (
@@ -226,11 +249,19 @@ export const StudentHomeView = () => {
                     </ThemeIcon>
                     <Title order={3}>Новые приключения</Title>
                 </Group>
-                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
-                    {data.available.map((c, i) => (
-                        <StudentCourseCard key={c.courseId} course={c} index={i + 2} variant="discover" />
-                    ))}
-                </SimpleGrid>
+                {availableCourses.length === 0 ? (
+                    <Paper p="xl" radius="xl" withBorder>
+                        <Text ta="center" c="dimmed" fw={600}>
+                            Пока нет доступных курсов на платформе. Загляни позже!
+                        </Text>
+                    </Paper>
+                ) : (
+                    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
+                        {availableCourses.map((c, i) => (
+                            <StudentCourseCard key={c.courseId} course={c} index={i + 2} variant="discover" />
+                        ))}
+                    </SimpleGrid>
+                )}
             </div>
 
             <Box

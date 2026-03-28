@@ -1,39 +1,64 @@
 import { memo } from 'react'
-import {ActionIcon, Badge, Button, Card, Group, Paper, Stack, TextInput, Textarea, Flex} from '@mantine/core'
-import { ArrowDown, ArrowUp, CirclePlus, Trash2 } from 'lucide-react'
+import {
+    ActionIcon,
+    Badge,
+    Card,
+    Group,
+    Paper,
+    Stack,
+    Text,
+    Textarea,
+    TextInput,
+    Flex,
+} from '@mantine/core'
+import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
-import type { CourseStep } from '../../../../entities'
-import { useCourseBuilderActions } from '../model/CourseBuilderContext'
+import type { Module, Step } from '../../../../entities'
 import { outlinedInputStyles } from '../model/inputStyles'
-import CodeExerciseEditor from './CodeExerciseEditor'
-import TestQuestionEditor from './TestQuestionEditor'
+import { useCourseEditorMutations } from '../model/useCourseEditorMutations'
+import { useGetLessonQuery } from '../../../../shared/api'
 
 type Props = {
+    courseId: string
     moduleId: string
-    step: CourseStep
+    modules: Module[]
+    step: Step
     stepIndex: number
     stepsCount: number
 }
 
-const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) => {
-    const { moveStep, removeStep, updateStep, addQuestion } = useCourseBuilderActions()
+const StepEditorComponent = ({ courseId, moduleId, modules, step, stepIndex, stepsCount }: Props) => {
+    const { moveStep, removeStep, saveLessonPatch } = useCourseEditorMutations(courseId)
+
+    const lessonId = step.type === 'LESSON' ? step.lesson?.id : undefined
+    const { data: lesson } = useGetLessonQuery(lessonId ?? '', {
+        skip: !lessonId,
+    })
+
+    const stepVariant = step.type === 'LESSON' ? 'lesson' : 'test'
+    const style = stepStyles[stepVariant]
+
+    const lessonTitle = lesson?.title ?? step.lesson?.title ?? ''
+    const lessonContent = lesson?.content ?? ''
 
     return (
-        <Card withBorder radius="md" style={{
-            border: stepStyles[step.type].border,
-            background: stepStyles[step.type].background,
-        }}>
+        <Card
+            withBorder
+            radius="md"
+            style={{
+                border: style.border,
+                background: style.background,
+            }}
+        >
             <Stack>
                 <Group justify="space-between">
-                    <Badge color={stepStyles[step.type].color}>
-                        {stepStyles[step.type].label}
-                    </Badge>
+                    <Badge color={style.color}>{style.label}</Badge>
                     <Group>
-                        <ActionIcon onClick={() => moveStep(moduleId, step.id, 'up')} disabled={stepIndex === 0}>
+                        <ActionIcon onClick={() => moveStep(moduleId, step.id, 'up', modules)} disabled={stepIndex === 0}>
                             <ArrowUp size={16} />
                         </ActionIcon>
                         <ActionIcon
-                            onClick={() => moveStep(moduleId, step.id, 'down')}
+                            onClick={() => moveStep(moduleId, step.id, 'down', modules)}
                             disabled={stepIndex === stepsCount - 1}
                         >
                             <ArrowDown size={16} />
@@ -44,60 +69,64 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                     </Group>
                 </Group>
 
-                <TextInput
-                    value={step.title}
-                    onChange={event => updateStep(moduleId, step.id, { title: event.currentTarget.value })}
-                    placeholder="Название шага"
-                    styles={outlinedInputStyles}
-                />
-
-                {step.type === 'lesson' && (
-                    <Flex
-                        direction="row"
-                        align="stretch"          // важно для одинаковой высоты
-                        gap="md"
-                        style={{
-                            minHeight: 320,      // начальная высота (можно под себя)
-                            maxWidth: '100%',    // не даём всему блоку растягиваться шире родителя
-                        }}
-                    >
-                        <Textarea
-                            value={step.markdownContent ?? ''}
-                            onChange={event =>
-                                updateStep(moduleId, step.id, {
-                                    markdownContent: event.currentTarget.value,
-                                })
-                            }
-                            placeholder="Введите содержимое урока в формате Markdown..."
+                {step.type === 'LESSON' && lessonId && (
+                    <>
+                        <TextInput
+                            value={lessonTitle}
+                            onChange={event => saveLessonPatch(lessonId, { title: event.currentTarget.value })}
+                            placeholder="Название урока"
                             styles={outlinedInputStyles}
-                            resize="vertical"           // разрешаем тянуть только вниз
-                            minRows={12}                // минимальное количество строк
-                            style={{
-                                flex: '1 1 50%',        // примерно половина ширины
-                                maxWidth: '50%',        // жёсткий потолок по ширине
-                            }}
                         />
-
-                        <Paper
-                            withBorder
-                            p="sm"
+                        <Flex
+                            direction="row"
+                            align="stretch"
+                            gap="md"
                             style={{
-                                flex: '1 1 50%',
-                                maxWidth: '50%',        // чтобы не рос шире
-                                background: 'white',
-                                border: '1px dashed var(--mantine-color-gray-4)',
-                                overflowY: 'auto',      // если контент большой — скролл внутри
-                                minHeight: '100%',      // занимает всю доступную высоту Flex
+                                minHeight: 320,
+                                maxWidth: '100%',
                             }}
                         >
-                            <ReactMarkdown>
-                                {step.markdownContent ?? ''}
-                            </ReactMarkdown>
-                        </Paper>
-                    </Flex>
+                            <Textarea
+                                value={lessonContent}
+                                onChange={event =>
+                                    saveLessonPatch(lessonId, { content: event.currentTarget.value })
+                                }
+                                placeholder="Содержимое урока в формате Markdown..."
+                                styles={outlinedInputStyles}
+                                resize="vertical"
+                                minRows={12}
+                                style={{
+                                    flex: '1 1 50%',
+                                    maxWidth: '50%',
+                                }}
+                            />
+                            <Paper
+                                withBorder
+                                p="sm"
+                                style={{
+                                    flex: '1 1 50%',
+                                    maxWidth: '50%',
+                                    background: 'white',
+                                    border: '1px dashed var(--mantine-color-gray-4)',
+                                    overflowY: 'auto',
+                                    minHeight: '100%',
+                                }}
+                            >
+                                <ReactMarkdown>{lessonContent}</ReactMarkdown>
+                            </Paper>
+                        </Flex>
+                    </>
                 )}
-                {step.type === 'test' && (
+
+                {step.type === 'LESSON' && !lessonId && (
+                    <Text c="dimmed" size="sm">
+                        У урока нет привязанной записи на сервере. Удалите шаг и создайте урок заново.
+                    </Text>
+                )}
+
+                {step.type === 'TEST' && (
                     <Stack
+                        gap="sm"
                         style={{
                             background: 'white',
                             border: '1px dashed var(--mantine-color-yellow-3)',
@@ -105,36 +134,13 @@ const StepEditorComponent = ({ moduleId, step, stepIndex, stepsCount }: Props) =
                             padding: 12,
                         }}
                     >
-                        {(step.questions ?? []).map(question => (
-                            <TestQuestionEditor
-                                key={question.id}
-                                moduleId={moduleId}
-                                stepId={step.id}
-                                question={question}
-                            />
-                        ))}
-                        <Button variant="light" leftSection={<CirclePlus size={14} />} onClick={() => addQuestion(moduleId, step.id)}>
-                            Добавить вопрос
-                        </Button>
-                    </Stack>
-                )}
-                {step.type === 'code' && (
-                    <Stack
-                        style={{
-                            background: 'white',
-                            border: '1px dashed var(--mantine-color-green-3)',
-                            borderRadius: 8,
-                            padding: 12,
-                        }}
-                    >
-                        {(step.codeExercises ?? []).map(exercise => (
-                            <CodeExerciseEditor
-                                key={exercise.id}
-                                moduleId={moduleId}
-                                stepId={step.id}
-                                codeExercise={exercise}
-                            />
-                        ))}
+                        <TextInput
+                            value={step.test?.title ?? ''}
+                            readOnly
+                            label="Тест"
+                            description="Заголовок приходит с сервера; редактор вопросов будет после подключения API тестов."
+                            styles={outlinedInputStyles}
+                        />
                     </Stack>
                 )}
             </Stack>
@@ -155,14 +161,7 @@ const stepStyles = {
         background: 'var(--mantine-color-yellow-0)',
         label: 'Тест',
     },
-    code: {
-        color: 'green',
-        border: '1px solid var(--mantine-color-green-4)',
-        background: 'var(--mantine-color-green-0)',
-        label: 'Код',
-    },
 }
-
 
 const StepEditor = memo(StepEditorComponent)
 

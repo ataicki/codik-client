@@ -1,3 +1,20 @@
+export type ParentKidCourseSummaryDto = {
+    courseId: string
+    title: string
+    coverUrl?: string
+    progressPercent: number
+    completedStepsCount: number
+    totalStepsCount: number
+    currentModuleTitle?: string
+}
+
+export type ParentKidCompletedCourseDto = {
+    courseId: string
+    title: string
+    completedAt: string
+    coverUrl?: string
+}
+
 export type ParentKidProgressDto = {
     kidId: string
     kidName: string
@@ -5,6 +22,8 @@ export type ParentKidProgressDto = {
     xp: number
     completedLessons: number
     totalLessons: number
+    coursesInProgress?: ParentKidCourseSummaryDto[]
+    completedCourses?: ParentKidCompletedCourseDto[]
 }
 
 export type ParentProfileDto = {

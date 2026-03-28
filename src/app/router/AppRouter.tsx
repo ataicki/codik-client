@@ -42,7 +42,7 @@ export const AppRouter = () => {
                         </Route>
 
                         <Route element={<RoleRoute role={UserRole.COURSE_CREATOR}/>}>
-                            <Route path={AppRoutes.COURSE_CREATOR} element={<CourseCreatorPage/>}/>
+                            <Route path={`${AppRoutes.COURSE_CREATOR}/:courseId`} element={<CourseCreatorPage/>}/>
                         </Route>
 
                     </Route>

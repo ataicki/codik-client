@@ -35,6 +35,22 @@ export const authApi = api.injectEndpoints({
             providesTags: ['User'],
         }),
 
+        uploadMyAvatar: build.mutation<UserResponseDto, File>({
+            query: file => {
+                const formData = new FormData()
+                formData.append('file', file)
+                return {
+                    url: `${env.AUTH_URL}${env.AUTH_ME_URL}/avatar`,
+                    method: 'PATCH',
+                    data: formData,
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            },
+            invalidatesTags: ['User'],
+        }),
+
         signOut: build.mutation<LogoutResponseDto, void>({
             query: () => ({
                 url: `${env.AUTH_URL}${env.AUTH_SIGN_OUT_URL}`,
@@ -50,4 +66,5 @@ export const {
     useSignUpMutation,
     useSignOutMutation,
     useGetMeQuery,
+    useUploadMyAvatarMutation,
 } = authApi

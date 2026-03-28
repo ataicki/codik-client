@@ -1,11 +1,14 @@
-import { Card, Stack, TextInput, Textarea } from '@mantine/core'
-import { useCourseBuilderActions, useCourseDraft } from '../model/CourseBuilderContext'
-import { outlinedInputStyles } from '../model/inputStyles'
+import {Card, Stack, TextInput, Textarea} from '@mantine/core'
+import {outlinedInputStyles} from '../model/inputStyles'
+import {CourseDetail, UpdateCourseRequest} from "../../../../entities";
+import { FC } from 'react';
 
-const CourseMetaForm = () => {
-    const { draft } = useCourseDraft()
-    const { updateDraftImmer } = useCourseBuilderActions()
+interface CourseMetaFormProps {
+    course: CourseDetail,
+    onUpdate: (newValue: UpdateCourseRequest) => void
+}
 
+const CourseMetaForm: FC<CourseMetaFormProps> = ({course, onUpdate}) => {
     return (
         <Card withBorder radius="xl" style={{
             border: '2px solid var(--mantine-color-gray-3)',
@@ -14,38 +17,21 @@ const CourseMetaForm = () => {
             <Stack>
                 <TextInput
                     label="Название курса"
-                    value={draft.title}
+                    value={course.title}
                     onChange={(event) => {
                         const value = event.currentTarget.value
-
-                        updateDraftImmer(state => {
-                            state.title = value
-                        })
-                    }}
-                    styles={outlinedInputStyles}
-                />
-                <TextInput
-                    label="Ссылка на обложку"
-                    value={draft.coverUrl}
-                    onChange={event => {
-                        const value = event.currentTarget.value
-
-                        updateDraftImmer(state => {
-                            state.coverUrl = value
-                        })
+                        onUpdate({title: value})
                     }}
                     styles={outlinedInputStyles}
                 />
                 <Textarea
                     label="Описание курса"
-                    value={draft.description}
+                    value={course.description}
                     onChange={event => {
                         const value = event.currentTarget.value
-
-                        updateDraftImmer(state => {
-                            state.description = value
-                        })
+                        onUpdate({description: value})
                     }}
+                    minLength={20}
                     minRows={4}
                     styles={outlinedInputStyles}
                 />

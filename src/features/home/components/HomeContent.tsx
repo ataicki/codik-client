@@ -2,6 +2,8 @@ import { Badge, Card, Grid, Group, Skeleton, Stack, Text, Title } from '@mantine
 import { useAppSelector } from '../../../app/store/hooks'
 import { UserRole } from '../../../entities'
 import { StudentHomeView } from './student/StudentHomeView'
+import CourseCreatorHomeView from './courseCreator/CourseCreatorHomeView.tsx'
+import { ParentHomeView } from './parent/ParentHomeView'
 
 const HomeContent = () => {
     const { user, isInitialized } = useAppSelector(state => state.auth)
@@ -22,29 +24,35 @@ const HomeContent = () => {
         return <StudentHomeView />
     }
 
-    const cards = user.role === UserRole.PARENT
-        ? [
-            { title: 'Контроль прогресса', description: 'Отслеживайте уровни, XP и активность ребенка каждый день.' },
-            { title: 'Домашняя поддержка', description: 'Понимайте, где ребенку нужна помощь по теме.' },
-            { title: 'Достижения', description: 'Отмечайте награды и мотивируйте продолжать занятия.' },
-        ]
-        : user.role === UserRole.ADMIN
+    if (user.role === UserRole.COURSE_CREATOR) {
+        return <CourseCreatorHomeView />
+    }
+
+    if (user.role === UserRole.PARENT) {
+        return <ParentHomeView />
+    }
+
+    const cards =
+        user.role === UserRole.ADMIN
             ? [
-                { title: 'Модерация пользователей', description: 'Проверяйте роли, активность и спорные действия в системе.' },
-                { title: 'Проверка заявок', description: 'Рассматривайте заявки на добавление и обновление курсов.' },
-                { title: 'Контроль качества', description: 'Следите за структурой и содержанием учебных материалов.' },
-            ]
-            : user.role === UserRole.COURSE_CREATOR
-                ? [
-                    { title: 'Создание курсов', description: 'Собирайте курс из модулей и шагов с уроками, тестами и кодовыми заданиями.' },
-                    { title: 'Редактирование модулей', description: 'Меняйте порядок и содержание шагов в каждом модуле.' },
-                    { title: 'Черновики и публикация', description: 'Готовьте изменения перед отправкой на модерацию.' },
-                ]
-                : [
-                    { title: 'Изучение модулей', description: 'Проходите темы по шагам в удобном темпе.' },
-                    { title: 'Практика и тесты', description: 'Закрепляйте материал через задачи и квизы.' },
-                    { title: 'Награды и прогресс', description: 'Получайте XP и открывайте достижения за активность.' },
-                ]
+                  {
+                      title: 'Модерация курсов',
+                      description: 'В разделе «Админ панель» проверяйте курсы на модерации и принимайте решения.',
+                  },
+                  {
+                      title: 'Пользователи',
+                      description: 'Роли и активность участников — в будущих инструментах администрирования.',
+                  },
+                  {
+                      title: 'Качество контента',
+                      description: 'Следите за структурой и полнотой материалов перед публикацией.',
+                  },
+              ]
+            : [
+                  { title: 'Главная', description: 'Здесь появятся действия для вашей роли, когда мы их подключим.' },
+                  { title: 'Профиль', description: 'Обновите данные и аватар в разделе «Профиль».' },
+                  { title: 'Поддержка', description: 'По вопросам доступа обратитесь к администратору платформы.' },
+              ]
 
     return (
         <Stack gap="lg">
@@ -57,7 +65,7 @@ const HomeContent = () => {
                         </Text>
                     </div>
                     <Badge size="lg" color="violet">
-                        {user.role === UserRole.PARENT ? 'Родитель' : user.role}
+                        {user.role === UserRole.ADMIN ? 'Администратор' : user.role}
                     </Badge>
                 </Group>
             </Card>

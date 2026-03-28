@@ -1,5 +1,3 @@
-export type StepType = 'lesson' | 'test' | 'code'
-
 export type CourseTestOption = {
     id: string
     text: string
@@ -20,17 +18,19 @@ export type CourseCodeExercise = {
     starterCode: string
 }
 
+export type CourseStepType = 'lesson' | 'test' | 'code'
+
 export type CourseStep = {
     id: string
     title: string
-    type: StepType
     order: number
+    type: CourseStepType
     markdownContent?: string
     questions?: CourseTestQuestion[]
     codeExercises?: CourseCodeExercise[]
 }
 
-export type CourseModule = {
+export type CourseLearnModule = {
     id: string
     title: string
     order: number
@@ -42,14 +42,5 @@ export type CourseDraft = {
     title: string
     description: string
     coverUrl: string
-    modules: CourseModule[]
-    updatedAt?: string
-}
-
-export type CreateCourseDraftRequest = Pick<CourseDraft, 'title' | 'description' | 'coverUrl'> & {
-    modules?: CourseModule[]
-}
-
-export type UpdateCourseDraftRequest = Partial<CreateCourseDraftRequest> & {
-    id: string
+    modules: CourseLearnModule[]
 }
