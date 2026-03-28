@@ -1,9 +1,5 @@
-const AdminPage = () => {
-    return (
-        <div>
+import { AdminModerationContent } from '../../features/admin/components'
 
-        </div>
-    );
-};
+const AdminPage = () => <AdminModerationContent />
 
-export default AdminPage;
+export default AdminPage

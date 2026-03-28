@@ -8,7 +8,7 @@ export const parentProfileApi = api.injectEndpoints({
                 url: '/parent/profile',
                 method: 'GET',
             }),
-            providesTags: ['User'],
+            providesTags: ['ParentProfile'],
         }),
     }),
 })

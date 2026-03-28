@@ -1,6 +1,7 @@
 import { api } from './api'
-import type { CourseDraft, StudentHomeResponse } from '../../entities'
+import type { CourseDetail, CourseDraft, Lesson, StudentHomeResponse } from '../../entities'
 import { getMockStudentCourse } from '../mock/studentCourses'
+import { mapCourseDetailToDraft } from '../lib/mapCourseDetailToDraft'
 
 const MOCK_STUDENT_HOME: StudentHomeResponse = {
     level: 7,
@@ -57,27 +58,44 @@ const MOCK_STUDENT_HOME: StudentHomeResponse = {
     ],
 }
 
+const collectLessonIds = (detail: CourseDetail) => {
+    const ids = new Set<string>()
+    for (const m of detail.modules) {
+        for (const s of m.steps) {
+            if (s.type === 'LESSON' && s.lesson) ids.add(s.lesson.id)
+        }
+    }
+    return ids
+}
+
 export const studentApi = api.injectEndpoints({
     endpoints: build => ({
         getStudentCourse: build.query<CourseDraft, string>({
             async queryFn(courseId, _api, _extraOptions, fetchWithBQ) {
-                const result = await fetchWithBQ({
-                    url: `/students/courses/${encodeURIComponent(courseId)}/content`,
+                const courseRes = await fetchWithBQ({
+                    url: `/courses/${encodeURIComponent(courseId)}`,
                     method: 'GET',
                 })
-                if ('data' in result && result.data != null) {
-                    return { data: result.data as CourseDraft }
+                if (!('data' in courseRes) || courseRes.data == null) {
+                    const mock = getMockStudentCourse(courseId)
+                    if (mock) return { data: mock }
+                    return {
+                        error: {
+                            status: 404,
+                            message: 'Курс не найден',
+                        },
+                    }
                 }
-                const mock = getMockStudentCourse(courseId)
-                if (mock) {
-                    return { data: mock }
-                }
-                return {
-                    error: {
-                        status: 404,
-                        message: 'Курс не найден',
-                    },
-                }
+                const detail = courseRes.data as CourseDetail
+                const lessonIds = collectLessonIds(detail)
+                const lessonContent: Record<string, Lesson> = {}
+                await Promise.all(
+                    [...lessonIds].map(async id => {
+                        const lr = await fetchWithBQ({ url: `/lessons/${id}`, method: 'GET' })
+                        if ('data' in lr && lr.data != null) lessonContent[id] = lr.data as Lesson
+                    }),
+                )
+                return { data: mapCourseDetailToDraft(detail, lessonContent) }
             },
             providesTags: (_result, _err, id) => [{ type: 'StudentCourse', id }],
         }),

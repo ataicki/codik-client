@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Accordion, Button, Stack, Text } from '@mantine/core'
 import { BookOpen, Code2, HelpCircle } from 'lucide-react'
-import type { StepType } from '../../../entities'
+import type { CourseStepType } from '../../../entities'
 import type { FlatStepItem } from '../model/flattenCourse'
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     onSelectStep: (stepId: string) => void
 }
 
-const stepIcon = (type: StepType) => {
+const stepIcon = (type: CourseStepType) => {
     switch (type) {
         case 'lesson':
             return BookOpen

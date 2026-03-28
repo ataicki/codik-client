@@ -18,6 +18,7 @@ export type UserResponseDto = {
     email: string
     fullName?: string
     role: UserRole
+    avatarUrl?: string | null
     createdAt?: string
     updatedAt?: string
 }

@@ -4,6 +4,17 @@ import {axiosBaseQuery} from "./baseApi.ts";
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: axiosBaseQuery(),
-    tagTypes: ['User', 'Post', 'CourseDraft', 'StudentHome', 'StudentCourse'],
+    tagTypes: [
+        'User',
+        'Post',
+        'CourseDraft',
+        'StudentHome',
+        'StudentCourse',
+        'Courses',
+        'Course',
+        'Lesson',
+        'Profile',
+        'ParentProfile',
+    ],
     endpoints: () => ({}),
 })
